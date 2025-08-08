@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetroCart - Mini Retro Arcade Merchandise Store</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            background-color: #333;
+            color: #fff;
+        }
+        .navbar a {
+            color: #fff !important;
+        }
+        .carousel-item {
+            height: 60vh;
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+        .product-grid {
+            margin-top: 50px;
+        }
+        .product-grid .card {
+            background-color: #fff;
+            border: none;
+            margin-bottom: 30px;
+            transition: transform 0.2s;
+        }
+        .product-grid .card:hover {
+            transform: scale(1.05);
+        }
+        .product-grid .card img {
+            max-width: 100%;
+            height: auto;
+        }
+        .product-grid .card-title {
+            font-size: 1.25rem;
+            margin-top: 15px;
+        }
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <a class="navbar-brand" href="#">RetroCart</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="products.html">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="checkout.html">Checkout</a>
+                  </li>
+                  
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary text-white" href="login.html">Join Us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+<!-- Carousel -->
+<div id="homeCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators/dots -->
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0"></button>
+        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2"></button>
+    </div>
+
+    <!-- The slideshow/carousel -->
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="d-flex justify-content-center align-items-center h-100">
+                <iframe src="https://giphy.com/embed/VtDRXohjexcyCDlL6Z" width="480" height="370" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+            </div>
+            <div class="carousel-caption">
+                <h3>For More Retro Fun!</h3>
+                <p class="para">Be part of our retro community and enjoy exclusive offers.</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="d-flex justify-content-center align-items-center h-100">
+                <iframe src="https://giphy.com/embed/deamFJOd89iTk0xYpR" width="480" height="370" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+            </div>
+            <div class="carousel-caption">
+                <a href="TimeMuncher.html" class="btn btn-outline-primary" style="color: #fff; border-color: #fff; font-size: 1.25rem;">Play Now</a>
+
+                <p class="para">Board for you pakage to arive play our new game to pass <time datetime=""></time></p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="d-flex justify-content-center align-items-center h-100">
+                <iframe src="https://giphy.com/embed/VtDRXohjexcyCDlL6Z" width="480" height="370" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Left and right controls/icons -->
+    <a class="carousel-control-prev" href="#homeCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#homeCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
+
+
+    <!-- Introduction Section -->
+    <section class="container my-5 text-center">
+        <h2>Welcome to RetroCart</h2>
+        <p>Explore our collection of retro-themed merchandise and bring back the nostalgia of arcade gaming.</p>
+    </section>
+
+    <!-- Product Grids -->
+    <section class="container product-grid">
+        <div class="row">
+            <!-- Clothes -->
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="./Images/Cloths.png" alt="Clothes" class="card-img-top">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Clothes</h5>
+                        <p class="card-text">Browse our exclusive range of retro-themed clothing.</p>
+                        <a href="products.html?category=clothes" class="btn btn-primary">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Knick-knacks -->
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="./Images/key-ring.png" alt="Knick-knacks" class="card-img-top">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Knick-knacks</h5>
+                        <p class="card-text">Find unique arcade-inspired knick-knacks and accessories.</p>
+                        <a href="products.html?category=knickknacks" class="btn btn-primary">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Limited Items -->
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="./Images/star-rating.png" alt="Limited Items" class="card-img-top">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Limited Items</h5>
+                        <p class="card-text">Get your hands on exclusive, limited-edition merchandise.</p>
+                        <a href="products.html?category=limited" class="btn btn-primary">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 RetroCart. All rights reserved.</p>
+            <p>
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a>
+            </p>
+            <p>Follow us on:
+                <a href="#">Facebook</a> |
+                <a href="#">Twitter</a> |
+                <a href="#">Instagram</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

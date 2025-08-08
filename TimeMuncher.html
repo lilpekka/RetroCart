@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>TimeMuncher Game</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #333;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            margin: auto;
+            border: 2px solid #000;
+        }
+        .score, .health, .ammo {
+            position: absolute;
+            top: 20px;
+            color: white;
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+        }
+        .score { left: 20px; }
+        .health { left: 150px; }
+        .ammo { left: 300px; }
+        .score, .health, .ammo {
+    top: 100px; /* Adjusted top to add space between navbar and stats */
+}
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 36px;
+            font-family: Arial, sans-serif;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+     <!-- Sticky Navigation -->
+     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <a class="navbar-brand" href="index.html">RetroCart</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="products.html">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="checkout.html">Checkout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="contact.html">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary text-white" href="login.html">Join Us</a>
+                </li>
+               
+            </ul>
+        </div>
+    </nav>
+
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+<div class="score" id="score">Score: 0</div>
+<div class="health" id="health">Health: 100</div>
+<div class="ammo" id="ammo">Ammo: 100</div>
+<div class="game-over" id="gameOver">Game Over! Your score: 0</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreDisplay = document.getElementById('score');
+    const healthDisplay = document.getElementById('health');
+    const ammoDisplay = document.getElementById('ammo');
+    const gameOverDisplay = document.getElementById('gameOver');
+
+    const player = {
+        x: 50,
+        y: canvas.height / 2,
+        width: 30,
+        height: 30,
+        speed: 14,
+        bullets: [],
+        health: 100,
+        ammo: 100,
+        bombs: 3,
+        damagedEnemies: []
+    };
+
+    const enemies = [];
+    const pickups = [];
+    const birds = [];
+    let score = 0;
+    let passedEnemies = 0;
+    let gameOver = false;
+    let dayNightCycle = 0; // 0 = day, 1 = night
+
+    function createEnemy() {
+        const enemy = {
+            x: canvas.width,
+            y: Math.random() * (canvas.height - 30),
+            width: 30,
+            height: 30,
+            speed: 2 + (score / 50)
+        };
+        enemies.push(enemy);
+    }
+
+    function createBird() {
+        const bird = {
+            x: canvas.width,
+            y: Math.random() * (canvas.height / 2), // Random height
+            width: 20,
+            height: 15,
+            speed: 5 // Speed of birds
+        };
+        birds.push(bird);
+    }
+
+    function createPickup() {
+        const type = Math.random() < 0.5 ? 'ammo' : 'health';
+        const pickup = {
+            x: canvas.width,
+            y: Math.random() * (canvas.height - 30),
+            width: 20,
+            height: 20,
+            speed: 2,
+            type: type
+        };
+        pickups.push(pickup);
+    }
+
+    function drawBackground() {
+        if (dayNightCycle === 0) {
+            ctx.fillStyle = 'rgba(135, 206, 250, 0.5)'; // Light blue for day
+        } else {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'; // Dark for night
+        }
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw sun
+        if (dayNightCycle === 0) {
+            ctx.fillStyle = 'yellow';
+            ctx.beginPath();
+            ctx.arc(700, 100, 40, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Draw clouds
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(200, 100, 30, 0, Math.PI * 2);
+        ctx.arc(230, 100, 30, 0, Math.PI * 2);
+        ctx.arc(215, 80, 30, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(500, 150, 30, 0, Math.PI * 2);
+        ctx.arc(530, 150, 30, 0, Math.PI * 2);
+        ctx.arc(515, 130, 30, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    function drawPlayer() {
+        ctx.fillStyle = 'green';
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+    }
+
+    function drawEnemies() {
+        ctx.fillStyle = 'red';
+        for (const enemy of enemies) {
+            ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+        }
+    }
+
+    function drawBirds() {
+        ctx.fillStyle = 'blue'; // Color for birds
+        for (const bird of birds) {
+            ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
+        }
+    }
+
+    function drawBullets() {
+        ctx.fillStyle = 'yellow';
+        for (const bullet of player.bullets) {
+            ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+        }
+    }
+
+    function drawPickups() {
+        for (const pickup of pickups) {
+            ctx.fillStyle = pickup.type === 'ammo' ? 'yellow' : 'white';
+            ctx.fillRect(pickup.x, pickup.y, pickup.width, pickup.height);
+        }
+    }
+
+    function updateEnemies() {
+        for (let i = enemies.length - 1; i >= 0; i--) {
+            enemies[i].x -= enemies[i].speed;
+            if (enemies[i].x + enemies[i].width < 0) {
+                enemies.splice(i, 1);
+                passedEnemies++;
+                score++;
+                scoreDisplay.innerText = `Score: ${score}`;
+
+                if (passedEnemies > 10) {
+                    gameOver = true;
+                    gameOverDisplay.innerText = `Game Over! You let ${passedEnemies} enemies pass. Your score: ${score}`;
+                    gameOverDisplay.style.display = 'block';
+                }
+            }
+        }
+    }
+
+    function updateBirds() {
+        for (let i = birds.length - 1; i >= 0; i--) {
+            birds[i].x -= birds[i].speed;
+            if (birds[i].x + birds[i].width < 0) {
+                birds.splice(i, 1);
+            }
+        }
+    }
+
+    function updateBullets() {
+        for (let i = player.bullets.length - 1; i >= 0; i--) {
+            player.bullets[i].x += player.bullets[i].speed;
+            if (player.bullets[i].x > canvas.width) {
+                player.bullets.splice(i, 1);
+            }
+        }
+    }
+
+    function updatePickups() {
+        for (let i = pickups.length - 1; i >= 0; i--) {
+            pickups[i].x -= pickups[i].speed;
+            if (pickups[i].x + pickups[i].width < 0) {
+                pickups.splice(i, 1);
+            }
+        }
+    }
+
+    function detectCollisions() {
+        for (let i = player.bullets.length - 1; i >= 0; i--) {
+            for (let j = enemies.length - 1; j >= 0; j--) {
+                if (player.bullets[i].x < enemies[j].x + enemies[j].width &&
+                    player.bullets[i].x + player.bullets[i].width > enemies[j].x &&
+                    player.bullets[i].y < enemies[j].y + enemies[j].height &&
+                    player.bullets[i].y + player.bullets[i].height > enemies[j].y) {
+                    
+                    player.bullets.splice(i, 1);
+                    enemies.splice(j, 1);
+                    score++;
+                    scoreDisplay.innerText = `Score: ${score}`;
+                    break;
+                }
+            }
+        }
+
+        for (const enemy of enemies) {
+            if (player.x < enemy.x + enemy.width &&
+                player.x + player.width > enemy.x &&
+                player.y < enemy.y + enemy.height &&
+                player.y + player.height > enemy.y) {
+                
+                if (!player.damagedEnemies.includes(enemy)) {
+                    player.health -= 5;
+                    healthDisplay.innerText = `Health: ${player.health}`;
+                    player.damagedEnemies.push(enemy);
+                }
+                
+                if (player.health <= 0) {
+                    gameOver = true;
+                    gameOverDisplay.innerText = `Game Over! Your score: ${score}`;
+                    gameOverDisplay.style.display = 'block';
+                }
+            }
+        }
+
+        for (const bird of birds) {
+            if (player.x < bird.x + bird.width &&
+                player.x + player.width > bird.x &&
+                player.y < bird.y + bird.height &&
+                player.y + player.height > bird.y) {
+                
+                player.health -= 1; // Damage from birds is now 1
+                healthDisplay.innerText = `Health: ${player.health}`;
+                if (player.health <= 0) {
+                    gameOver = true;
+                    gameOverDisplay.innerText = `Game Over! Your score: ${score}`;
+                    gameOverDisplay.style.display = 'block';
+                }
+            }
+        }
+
+        for (let i = pickups.length - 1; i >= 0; i--) {
+            if (player.x < pickups[i].x + pickups[i].width &&
+                player.x + player.width > pickups[i].x &&
+                player.y < pickups[i].y + pickups[i].height &&
+                player.y + player.height > pickups[i].y) {
+                
+                if (pickups[i].type === 'ammo') {
+                    player.ammo += 10;
+                } else if (pickups[i].type === 'health') {
+                    player.health = Math.min(100, player.health + 20);
+                }
+                pickups.splice(i, 1);
+                ammoDisplay.innerText = `Ammo: ${player.ammo}`;
+                healthDisplay.innerText = `Health: ${player.health}`;
+            }
+        }
+    }
+
+    function useBomb() {
+        if (player.bombs > 0) {
+            enemies.length = 0;
+            player.bombs--;
+            ammoDisplay.innerText = `Ammo: ${player.ammo}`;
+        }
+    }
+
+    function update() {
+        if (gameOver) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBackground();
+        drawPlayer();
+        drawEnemies();
+        drawBirds();
+        drawBullets();
+        drawPickups();
+        updateEnemies();
+        updateBirds();
+        updateBullets();
+        updatePickups();
+        detectCollisions();
+
+        requestAnimationFrame(update);
+    }
+
+    window.addEventListener('keydown', (e) => {
+        switch (e.code) {
+            case 'ArrowUp':
+                if (player.y > 0) player.y -= player.speed;
+                break;
+            case 'ArrowDown':
+                if (player.y < canvas.height - player.height) player.y += player.speed;
+                break;
+            case 'Space':
+                if (player.ammo > 0) {
+                    player.bullets.push({ x: player.x + player.width, y: player.y + 10, width: 10, height: 5, speed: 10 });
+                    player.ammo--;
+                    ammoDisplay.innerText = `Ammo: ${player.ammo}`;
+                }
+                break;
+            case 'KeyB':
+                useBomb();
+                break;
+        }
+    });
+
+    setInterval(createEnemy, 2000);
+    setInterval(createBird, 3000); // Create birds every 3 seconds
+    setInterval(createPickup, 5000);
+    update();
+</script>
+
+</body>
+</html>

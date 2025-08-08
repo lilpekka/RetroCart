@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - RetroCart</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            background-color: #333;
+            color: #fff;
+        }
+        .navbar a {
+            color: #fff !important;
+        }
+        .product-grid {
+            margin-top: 50px;
+        }
+        .product-grid .card {
+            background-color: #fff;
+            border: none;
+            margin-bottom: 30px;
+            transition: transform 0.2s;
+        }
+        .product-grid .card:hover {
+            transform: scale(1.05);
+        }
+        .product-grid .card img {
+            max-width: 100%;
+            height: auto;
+        }
+        .product-grid .card-title {
+            font-size: 1.25rem;
+            margin-top: 15px;
+        }
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <a class="navbar-brand" href="index.html">RetroCart</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="products.html">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="checkout.html">Checkout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary text-white" href="login.html">Join Us</a>
+                </li>
+              
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Products Section -->
+    <div class="container my-5">
+        <h2 class="text-center">Our Products</h2>
+        <!-- Filter Buttons (Optional) -->
+        <div class="text-center mb-4">
+            <button class="btn btn-outline-primary filter-btn" data-category="all">All</button>
+            <button class="btn btn-outline-primary filter-btn" data-category="clothes">Clothes</button>
+            <button class="btn btn-outline-primary filter-btn" data-category="knickknacks">Knick-knacks</button>
+            <button class="btn btn-outline-primary filter-btn" data-category="limited">Limited Items</button>
+        </div>
+        <div class="row" id="product-list">
+            <!-- Product items will be added here dynamically -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 RetroCart. All rights reserved.</p>
+            <p>
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a>
+            </p>
+            <p>Follow us on:
+                <a href="#">Facebook</a> |
+                <a href="#">Twitter</a> |
+                <a href="#">Instagram</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Sample product data
+            const products = [
+                {name: 'Retro Station Top Tee', category: 'clothes', price: '₹ 1,933', desc: 'Select Your Weapon Funny Gamer T Shirt Game Play Box Controllers t-shirt.', img: './Images/il_794xN.5248084342_n5t0.jpg'},
+                {name: 'I paused my Game to Be Here Shirt', category: 'clothes', price: '₹ 781', desc: 'Funny Shirt, Gamer Gift, Funny Gaming Shirt, Gaming T-Shirt, Funny Gaming T-shirt,Gaming Present.', img: './Images/il_794xN.3610123857_1m0c.jpg'},
+                {name: "Sorry I Can't Hear You I'm Gaming Hoodie", category: 'clothes', price: '₹ 2,865', desc: 'Funny Gamer Gifts, Game Lover Hoodie, Gamer Gifts For Him, Gamer Shirt, Video Game Shirt, Game Tee.', img: './Images/il_794xN.4470123711_sg5a.jpg'},
+                {name: 'Game Gift T-shirt', category: 'clothes', price: '₹ 864', desc: 'Cat Gaming Shirt, Gaming T-shirt, Gift Video Game Shirt, Video Game Gifts T-shirt', img: './Images/il_794xN.5337757709_5u1z.jpg'},
+                {name: 'Sus Among Us Heavy Cotton T-Shirt', category: 'clothes', price: '₹ 1,933', desc: 'Funny Among Us Character Tee for Gamers - Ideal Gift for Video Game Parties & Casual Wear.', img: './Images/il_794xN.5970239938_ravd.jpg'},
+                {name: 'Arcade Mug', category: 'knickknacks', price: '$15.99', desc: 'A retro-themed mug.', img: 'https://via.placeholder.com/300x200?text=Arcade+Mug'},
+                {name: 'Limited Edition Poster', category: 'limited', price: '$49.99', desc: 'Exclusive limited-edition poster.', img: 'https://via.placeholder.com/300x200?text=Limited+Poster'},
+                {name: 'Retro Keychain', category: 'knickknacks', price: '$9.99', desc: 'A stylish retro keychain.', img: 'https://via.placeholder.com/300x200?text=Retro+Keychain'},
+                {name: 'Collector\'s Figurine', category: 'limited', price: '$59.99', desc: 'A rare collector\'s figurine.', img: 'https://via.placeholder.com/300x200?text=Collector\'s+Figurine'},
+                // Add more products as needed
+            ];
+
+            // Function to display products
+            function displayProducts(category) {
+    $('#product-list').empty();
+    const filteredProducts = category === 'all' ? products : products.filter(product => product.category === category);
+
+    if (filteredProducts.length === 0) {
+        $('#product-list').html('<div class="col-12 text-center"><p>No products found in this category.</p></div>');
+        return;
+    }
+
+    filteredProducts.forEach((product, index) => {
+        $('#product-list').append(`
+        <div class="col-md-4">
+            <div class="card">
+                <img src="${product.img}" class="card-img-top" alt="${product.name}">
+                <div class="card-body">
+                    <h5 class="card-title">${product.name}</h5>
+                    <p class="card-text">${product.desc}</p>
+                    <p class="card-text"><strong>${product.price}</strong></p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#productModal${index}">
+                        View Details
+                    </button>
+                    <button class="btn btn-success add-to-cart" data-product="${product.name}">Add to Cart</button>
+                    <div class="cart-message" style="display: none;">Added to cart!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="productModal${index}" tabindex="-1" aria-labelledby="exampleModalLabel${index}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel${index}">${product.name}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="${product.img}" class="img-fluid mb-3" alt="${product.name}">
+                        <p>${product.desc}</p>
+                        <p><strong>Price: ${product.price}</strong></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>`);
+    });
+}
+
+            // Get category from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryFromURL = urlParams.get('category') || 'all';
+
+            // Display products based on category
+            displayProducts(categoryFromURL);
+
+            // Highlight active filter button
+            $('.filter-btn').each(function() {
+                if ($(this).data('category') === categoryFromURL) {
+                    $(this).addClass('active');
+                }
+            });
+
+            // Filter button click event
+            $('.filter-btn').click(function() {
+                const selectedCategory = $(this).data('category');
+                // Update URL without reloading the page
+                const newURL = new URL(window.location.href);
+                newURL.searchParams.set('category', selectedCategory);
+                window.history.pushState({}, '', newURL);
+                // Display products
+                displayProducts(selectedCategory);
+                // Highlight active button
+                $('.filter-btn').removeClass('active');
+                $(this).addClass('active');
+            });
+
+// Add to Cart button click event
+$('.add-to-cart').click(function() {
+    const productName = $(this).data('product');
+    const product = products.find(p => p.name === productName);
+    
+    if (product) {
+        // Get existing cart items from local storage
+        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        
+        // Check if the product is already in the cart
+        const existingProductIndex = cartItems.findIndex(item => item.name === product.name);
+        
+        if (existingProductIndex > -1) {
+            // If product already in cart, update quantity or other necessary details
+            cartItems[existingProductIndex].quantity += 1; // Increment quantity
+        } else {
+            // Add new product to cart
+            cartItems.push({ name: product.name, img: product.img, price: product.price });
+        }
+        
+        // Save updated cart items to local storage
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        
+        // Show message (you can customize this further)
+        $(this).siblings('.cart-message').show().delay(2000).fadeOut();
+    }
+});
+
+
+        });
+    </script>
+</body>
+</html>
